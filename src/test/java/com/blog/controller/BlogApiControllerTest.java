@@ -92,4 +92,23 @@ class BlogApiControllerTest {
                 .andExpect(jsonPath("$[0].title").value(article.getTitle()))
                 .andExpect(jsonPath("$[0].content").value(article.getContent()));
     }
+
+    @DisplayName("[Success] 아이디에 해당하는 글을 조회하는 작업에 성공합니다.")
+    @Test
+    public void findArticleById() throws Exception {
+        final String uri = "/api/articles/{id}";
+        final String title = "ex title";
+        final String content = "ex content";
+
+        Article savedArticle = blogRepository.save(Article.builder()
+                .title(title)
+                .content(content)
+                .build());
+
+        final ResultActions resultActions = api.perform(get(uri, savedArticle.getId()));
+
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(title))
+                .andExpect(jsonPath("$.content").value(content));
+    }
 }
