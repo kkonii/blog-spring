@@ -1,6 +1,7 @@
 package com.blog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,6 +13,7 @@ import com.blog.respository.BlogRepository;
 import com.blog.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -110,5 +112,24 @@ class BlogApiControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(title))
                 .andExpect(jsonPath("$.content").value(content));
+    }
+
+    @DisplayName("[Success] 아이디에 해당하는 글을 삭제하는 작업에 성공합니다.")
+    @Test
+    public void deleteArticleById() throws Exception {
+        final String uri = "/api/articles/{id}";
+        final String title = "ex title";
+        final String content = "ex content";
+
+        Article savedArticle = blogRepository.save(Article.builder()
+                .title(title)
+                .content(content)
+                .build());
+
+        final ResultActions resultActions = api.perform(delete(uri, savedArticle.getId()));
+        resultActions.andExpect(status().isOk());
+
+        List<Article> articles = blogRepository.findAll();
+        Assertions.assertTrue(articles.isEmpty());
     }
 }
