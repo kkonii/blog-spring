@@ -1,12 +1,15 @@
 package com.blog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.blog.controller.dto.AddArticleRequest;
 import com.blog.entity.Article;
 import com.blog.respository.BlogRepository;
+import com.blog.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +41,7 @@ class BlogApiControllerTest {
 
     @Autowired
     private BlogRepository blogRepository;
+    private BlogService blogService;
 
     @BeforeEach
     public void setApi() {
@@ -68,5 +72,24 @@ class BlogApiControllerTest {
         assertThat(articles).hasSize(1);
         assertThat(articles.get(0).getTitle()).isEqualTo(title);
         assertThat(articles.get(0).getContent()).isEqualTo(content);
+    }
+
+    @DisplayName("[Success] 모든 글을 조회하는 작업에 성공합니다.")
+    @Test
+    public void findArticles() throws Exception {
+        final String uri = "/api/articles";
+        final Article article = Article.builder()
+                .title("글")
+                .content("제목")
+                .build();
+
+        blogRepository.save(article);
+
+        final ResultActions resultAction = api.perform(get(uri)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultAction.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value(article.getTitle()))
+                .andExpect(jsonPath("$[0].content").value(article.getContent()));
     }
 }

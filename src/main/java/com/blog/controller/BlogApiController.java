@@ -1,11 +1,14 @@
 package com.blog.controller;
 
 import com.blog.controller.dto.AddArticleRequest;
+import com.blog.controller.dto.response.ArticleResponse;
 import com.blog.entity.Article;
 import com.blog.service.BlogService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +25,16 @@ public class BlogApiController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(article);
+    }
+
+    @GetMapping("/api/articles")
+    public ResponseEntity<List<ArticleResponse>> findAllArticles() {
+        List<ArticleResponse> articles = blogService.findAll()
+                .stream()
+                .map(article -> new ArticleResponse(article))
+                .toList();
+
+        return ResponseEntity.ok()
+                .body(articles);
     }
 }
