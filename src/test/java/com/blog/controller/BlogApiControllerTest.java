@@ -7,7 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.blog.controller.dto.AddArticleRequest;
+import com.blog.controller.dto.request.AddArticleRequest;
+import com.blog.controller.dto.request.UpdateArticleRequest;
 import com.blog.entity.Article;
 import com.blog.respository.BlogRepository;
 import com.blog.service.BlogService;
@@ -131,5 +132,34 @@ class BlogApiControllerTest {
 
         List<Article> articles = blogRepository.findAll();
         Assertions.assertTrue(articles.isEmpty());
+    }
+
+    @DisplayName("[Success] 글의 제목과 글을 수정하는 작업에 성공합니다.")
+    @Test
+    public void updateArticle() throws Exception {
+        final String uri = "/api/articles/{id}";
+        final String title = "기존의 제목";
+        final String content = "기존의 글";
+
+        Article article = blogRepository.save(Article.builder()
+                .title(title)
+                .content(content)
+                .build());
+
+        final String newTitle = "new title";
+        final String newContent = "new content";
+
+        UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent);
+
+        final ResultActions resultActions = api.perform(post(uri, article.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)));
+
+        Article updatedArticle = blogRepository.findById(article.getId()).get();
+
+        resultActions.andExpect(status().isOk());
+
+        assertThat(updatedArticle.getTitle()).isEqualTo(newTitle);
+        assertThat(updatedArticle.getContent()).isEqualTo(newContent);
     }
 }

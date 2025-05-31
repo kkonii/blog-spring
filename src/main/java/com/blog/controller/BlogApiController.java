@@ -1,6 +1,7 @@
 package com.blog.controller;
 
-import com.blog.controller.dto.AddArticleRequest;
+import com.blog.controller.dto.request.AddArticleRequest;
+import com.blog.controller.dto.request.UpdateArticleRequest;
 import com.blog.controller.dto.response.ArticleResponse;
 import com.blog.entity.Article;
 import com.blog.service.BlogService;
@@ -55,5 +56,14 @@ public class BlogApiController {
 
         return ResponseEntity.ok()
                 .build();
+    }
+
+    @PostMapping("/api/articles/{id}")
+    public ResponseEntity<Article> updateArticle(@PathVariable("id") Long id,
+                                                 @RequestBody UpdateArticleRequest articleRequest) {
+        Article article = blogService.update(id, articleRequest);
+
+        return ResponseEntity.ok()
+                .body(article);
     }
 }

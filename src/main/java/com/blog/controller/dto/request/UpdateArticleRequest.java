@@ -1,4 +1,4 @@
-package com.blog.controller.dto;
+package com.blog.controller.dto.request;
 
 import com.blog.entity.Article;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddArticleRequest {
+public class UpdateArticleRequest {
 
     private String title;
     private String content;

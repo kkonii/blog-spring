@@ -1,8 +1,10 @@
 package com.blog.service;
 
-import com.blog.controller.dto.AddArticleRequest;
+import com.blog.controller.dto.request.AddArticleRequest;
+import com.blog.controller.dto.request.UpdateArticleRequest;
 import com.blog.entity.Article;
 import com.blog.respository.BlogRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,13 @@ public class BlogService {
 
     public void deleteById(Long id) {
         blogRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Article update(Long id, UpdateArticleRequest request) {
+        Article article = findById(id);
+        article.update(request.getTitle(), request.getContent());
+
+        return article;
     }
 }
