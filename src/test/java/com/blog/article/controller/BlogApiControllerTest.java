@@ -1,4 +1,4 @@
-package com.blog.controller;
+package com.blog.article.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.blog.controller.dto.request.AddArticleRequest;
-import com.blog.controller.dto.request.UpdateArticleRequest;
-import com.blog.entity.Article;
-import com.blog.respository.BlogRepository;
-import com.blog.service.BlogService;
+import com.blog.article.controller.dto.request.AddArticleRequest;
+import com.blog.article.controller.dto.request.UpdateArticleRequest;
+import com.blog.article.entity.Article;
+import com.blog.article.respository.BlogRepository;
+import com.blog.article.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

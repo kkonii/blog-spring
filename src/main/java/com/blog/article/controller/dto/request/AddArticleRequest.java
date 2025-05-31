@@ -1,6 +1,6 @@
-package com.blog.controller.dto.request;
+package com.blog.article.controller.dto.request;
 
-import com.blog.entity.Article;
+import com.blog.article.entity.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

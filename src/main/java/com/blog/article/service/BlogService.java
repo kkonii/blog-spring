@@ -1,9 +1,9 @@
-package com.blog.service;
+package com.blog.article.service;
 
-import com.blog.controller.dto.request.AddArticleRequest;
-import com.blog.controller.dto.request.UpdateArticleRequest;
-import com.blog.entity.Article;
-import com.blog.respository.BlogRepository;
+import com.blog.article.controller.dto.request.AddArticleRequest;
+import com.blog.article.controller.dto.request.UpdateArticleRequest;
+import com.blog.article.entity.Article;
+import com.blog.article.respository.BlogRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

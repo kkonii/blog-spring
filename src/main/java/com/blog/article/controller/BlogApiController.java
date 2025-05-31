@@ -1,10 +1,10 @@
-package com.blog.controller;
+package com.blog.article.controller;
 
-import com.blog.controller.dto.request.AddArticleRequest;
-import com.blog.controller.dto.request.UpdateArticleRequest;
-import com.blog.controller.dto.response.ArticleResponse;
-import com.blog.entity.Article;
-import com.blog.service.BlogService;
+import com.blog.article.controller.dto.request.AddArticleRequest;
+import com.blog.article.controller.dto.request.UpdateArticleRequest;
+import com.blog.article.controller.dto.response.ArticleResponse;
+import com.blog.article.entity.Article;
+import com.blog.article.service.BlogService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

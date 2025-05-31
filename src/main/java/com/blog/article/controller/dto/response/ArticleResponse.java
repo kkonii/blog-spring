@@ -1,6 +1,6 @@
-package com.blog.controller.dto.response;
+package com.blog.article.controller.dto.response;
 
-import com.blog.entity.Article;
+import com.blog.article.entity.Article;
 import lombok.Getter;
 
 @Getter
