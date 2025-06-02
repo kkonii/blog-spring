@@ -1,6 +1,6 @@
-package com.blog.auth.service;
+package com.blog.user.service;
 
-import com.blog.auth.repository.UserRepository;
+import com.blog.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

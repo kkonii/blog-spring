@@ -1,6 +1,6 @@
-package com.blog.auth.repository;
+package com.blog.user.repository;
 
-import com.blog.auth.entity.User;
+import com.blog.user.entity.User;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
