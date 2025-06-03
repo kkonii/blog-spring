@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -57,7 +56,7 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService)
+            HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserService userDetailService)
             throws Exception {
 
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
