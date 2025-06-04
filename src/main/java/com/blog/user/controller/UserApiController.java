@@ -16,6 +16,6 @@ public class UserApiController {
     public String signUp(AddUserRequest request) {
         userService.save(request);
 
-        return "redirect:/login";
+        return "redirect:/api/login";
     }
 }
