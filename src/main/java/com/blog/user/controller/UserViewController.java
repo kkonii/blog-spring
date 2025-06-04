@@ -17,4 +17,10 @@ public class UserViewController {
         //api/signup 경로로 접근시 해당 메서드가 signup.html 을 반환
         return "signup";
     }
+
+    @GetMapping("api/home")
+    public String home() {
+        //api/home 경로로 접근시 해당 메서드가 home.html 을 반환
+        return "home";
+    }
 }
