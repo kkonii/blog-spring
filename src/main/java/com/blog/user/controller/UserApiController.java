@@ -3,10 +3,10 @@ package com.blog.user.controller;
 import com.blog.user.controller.dto.request.AddUserRequest;
 import com.blog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class UserApiController {
 
