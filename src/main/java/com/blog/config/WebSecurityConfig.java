@@ -32,17 +32,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         HttpSecurity security = http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/login", "/signup", "/user")
+                auth.requestMatchers("/api/login", "/api/signup", "/api/user")
                         .permitAll()
                         .anyRequest().authenticated()
         );
 
         //로그인 설정
-        security.formLogin(auth -> auth.loginPage("/login")
+        security.formLogin(auth -> auth.loginPage("/api/login")
                 .defaultSuccessUrl("/api/articles"));
 
         //로그아웃 설정
-        security.logout(auth -> auth.logoutSuccessUrl("/login")
+        security.logout(auth -> auth.logoutSuccessUrl("/api/login")
                 .invalidateHttpSession(true));
 
         //csrf 비활성화
