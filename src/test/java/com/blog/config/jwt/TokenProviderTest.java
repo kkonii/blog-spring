@@ -82,4 +82,17 @@ public class TokenProviderTest {
 
         assertThat(((UserDetails) authentication.getPrincipal()).getUsername()).isEqualTo(userEmail);
     }
+
+    @Test
+    @DisplayName("[Success] 토큰 기반으로 유저의 아이디를 가져오는 데에 성공한다.")
+    void getUserId() {
+        String userEmail = "user@gmail.com";
+        User user = userRepository.save(User.builder()
+                .email(userEmail)
+                .build());
+
+        String token = tokenProvider.generateToken(user, Duration.ofDays(14L));
+
+        assertThat(tokenProvider.getUserId(token)).isEqualTo(user.getId());
+    }
 }
