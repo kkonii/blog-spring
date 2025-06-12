@@ -1,12 +1,12 @@
-package com.blog.config;
+package com.blog.config.jwt;
 
-import com.blog.config.jwt.JwtProperties;
-import com.blog.config.jwt.TokenProvider;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.blog.user.entity.User;
 import com.blog.user.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import java.time.Duration;
-import org.assertj.core.api.Assertions;
+import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,19 @@ public class TokenProviderTest {
                 .getBody()
                 .get("id", Long.class);
 
-        Assertions.assertThat(userId).isEqualTo(testUser.getId());
+        assertThat(userId).isEqualTo(testUser.getId());
+    }
+
+    @Test
+    @DisplayName("[Exception] 만료된 토큰인 경우 유효성을 검증하는 데에 실패한다.")
+    void validateToken() {
+        String token = JwtFactory.builder()
+                .expiration(new Date(new Date().getTime() - Duration.ofDays(7).toMillis()))
+                .build()
+                .createToken(jwtProperties);
+
+        boolean result = tokenProvider.validateToken(token);
+
+        assertThat(result).isFalse();
     }
 }

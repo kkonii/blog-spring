@@ -33,4 +33,17 @@ public class TokenProvider {
                 .signWith(jwtProperties.getSecretKey())
                 .compact();
     }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(jwtProperties.getSecretKey())
+                    .build()
+                    .parseClaimsJws(token);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
