@@ -7,6 +7,7 @@ import com.blog.user.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,13 +87,12 @@ public class TokenProviderTest {
     @Test
     @DisplayName("[Success] 토큰 기반으로 유저의 아이디를 가져오는 데에 성공한다.")
     void getUserId() {
-        String userEmail = "user@gmail.com";
-        User user = userRepository.save(User.builder()
-                .email(userEmail)
-                .build());
+        Long userId = 1L;
+        String token = JwtFactory.builder()
+                .claims(Map.of("id", userId))
+                .build()
+                .createToken(jwtProperties);
 
-        String token = tokenProvider.generateToken(user, Duration.ofDays(14L));
-
-        assertThat(tokenProvider.getUserId(token)).isEqualTo(user.getId());
+        assertThat(tokenProvider.getUserId(token)).isEqualTo(userId);
     }
 }
