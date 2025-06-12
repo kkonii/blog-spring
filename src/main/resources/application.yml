@@ -23,4 +23,4 @@ spring:
 # jwt token
 jwt:
   issuer: testing@gmail.com
-  secret key: springboot-sample
+  secret key: springboot-testing-sample-key-value
