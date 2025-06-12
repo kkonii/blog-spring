@@ -1,11 +1,17 @@
 package com.blog.config.jwt;
 
 import com.blog.user.entity.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,5 +51,22 @@ public class TokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+
+        return new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities),
+                token, authorities);
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
