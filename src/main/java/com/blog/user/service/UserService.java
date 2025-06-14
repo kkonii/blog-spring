@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-// 회원 정보를 추가함
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,5 +23,10 @@ public class UserService {
                 .password(password)
                 .build()
         ).getId();
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 }
