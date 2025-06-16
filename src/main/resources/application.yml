@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+
+  # H2 Console 활성화
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+    # 테이블 생성 후에 data.sql 실행
+    # OR BeanCreationException 발생
+    # api/find-article
+    defer-datasource-initialization: true
