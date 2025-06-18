@@ -1,12 +1,16 @@
 package com.blog.oauth.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Base64;
-import org.springframework.util.SerializationUtils;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CookieUtil {
+
+    private static ObjectMapper mapper = new ObjectMapper();
 
     //요청값을 기반으로 쿠키를 추가
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
@@ -33,16 +37,13 @@ public class CookieUtil {
     }
 
     //객체를 직렬화하여 쿠키에 들어갈 수 있는 값으로 변환
-    public static String serialize(Object obj) {
-        return Base64.getUrlEncoder()
-                .encodeToString(SerializationUtils.serialize(obj));
+    public static String serialize(Object obj) throws JsonProcessingException {
+        return mapper.writeValueAsString(obj);
     }
 
     //쿠키 값을 역직렬화해 객체로 변환
-    public static <T> T deserialize(Cookie cookie, Class<T> clazz) {
-        return clazz.cast(
-                SerializationUtils.deserialize(
-                        Base64.getUrlDecoder().decode(cookie.getValue()))
-        );
+    public static <T> T deserialize(Cookie cookie, Class<T> clazz) throws JsonProcessingException {
+        //cookie 의 value 값들을 다 가져오는 듯
+        return mapper.readValue(cookie.getValue(), clazz);
     }
 }
