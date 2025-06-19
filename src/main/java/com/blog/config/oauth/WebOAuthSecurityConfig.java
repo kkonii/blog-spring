@@ -39,6 +39,14 @@ public class WebOAuthSecurityConfig {
 
         // 헤더를 확인할 커스텀 filter 추가
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // 토큰 재발급 url 은 인증 없이 접근을 허용 & 나머지 Api URL 은 인증을 필요
+        http.authorizeHttpRequests(customizer ->
+                customizer.requestMatchers("/api/token").permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll());
+
+        return http.build();
     }
 
     @Bean
