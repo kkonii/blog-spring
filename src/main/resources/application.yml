@@ -19,3 +19,8 @@ spring:
     # OR BeanCreationException 발생
     # api/find-article
     defer-datasource-initialization: true
+
+# jwt token
+jwt:
+  issuer: testing@gmail.com
+  secret key: springboot-testing-sample-key-value
