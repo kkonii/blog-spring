@@ -7,11 +7,14 @@ import com.blog.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -45,6 +48,13 @@ public class WebOAuthSecurityConfig {
                 customizer.requestMatchers("/api/token").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll());
+
+        // /api 로 시작하는 url 인 경우 인증 실패시 401 응답
+        http.exceptionHandling((handlingCustomizer) -> handlingCustomizer
+                .defaultAuthenticationEntryPointFor(
+                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                        PathPatternRequestMatcher.withDefaults().matcher("/api/{*}"))
+        );
 
         return http.build();
     }
