@@ -4,6 +4,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 import com.blog.config.TokenAuthenticationFilter;
 import com.blog.config.jwt.TokenProvider;
+import com.blog.jwt.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,11 +57,21 @@ public class WebOAuthSecurityConfig {
                         PathPatternRequestMatcher.withDefaults().matcher("/api/{*}"))
         );
 
+        http.oauth2Login(auth -> auth.loginPage("/api/login")
+                .authorizationEndpoint(point -> point.authorizationRequestRepository(
+                        oAuth2AuthorizationRequestBasedOnCookieRepository()
+                )));
+
         return http.build();
     }
 
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() throws Exception {
         return new TokenAuthenticationFilter(tokenProvider);
+    }
+
+    @Bean
+    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
+        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
     }
 }
