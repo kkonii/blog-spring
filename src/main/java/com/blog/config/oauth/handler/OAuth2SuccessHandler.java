@@ -1,6 +1,7 @@
 package com.blog.config.oauth.handler;
 
 import com.blog.config.jwt.TokenProvider;
+import com.blog.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.blog.jwt.domain.RefreshToken;
 import com.blog.jwt.repository.RefreshTokenRepository;
 import com.blog.oauth.util.CookieUtil;
@@ -27,6 +28,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final UserService userService;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -42,6 +44,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String accessToken = tokenProvider.generateToken(user, Duration.ofDays(1));
         String targetUrl = getTargetUrl(accessToken);
+
+        clearAuthenticationAttributes(request, response);
     }
 
     private String getTargetUrl(String token) {
@@ -49,5 +53,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .queryParam("token", token)
                 .build()
                 .toUriString();
+    }
+
+    private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
+        super.clearAuthenticationAttributes(request);
+        oAuth2AuthorizationRequestBasedOnCookieRepository.removeAuthorizationRequest(request, response);
     }
 }
