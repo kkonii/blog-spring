@@ -3,10 +3,10 @@ package com.blog.config.oauth.handler;
 import com.blog.config.jwt.TokenProvider;
 import com.blog.jwt.domain.RefreshToken;
 import com.blog.jwt.repository.RefreshTokenRepository;
+import com.blog.oauth.util.CookieUtil;
 import com.blog.user.entity.User;
 import com.blog.user.service.UserService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,6 +21,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    private static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
+
     private final UserService userService;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -32,9 +34,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String email = oAuth2User.getAttribute("email");
         User user = userService.findByEmail(email);
 
-        String refreshToken = tokenProvider.generateToken(user, Duration.ofDays(14));
+        String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
         refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken));
-
-        response.addCookie(new Cookie("refresh_token", refreshToken));
+        CookieUtil.addCookie(response, "refresh_token", refreshToken, (int) REFRESH_TOKEN_DURATION.toSeconds());
     }
 }
