@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
@@ -36,6 +37,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
         refreshTokenRepository.save(new RefreshToken(user.getId(), refreshToken));
+
         CookieUtil.addCookie(response, "refresh_token", refreshToken, (int) REFRESH_TOKEN_DURATION.toSeconds());
+
+        String accessToken = tokenProvider.generateToken(user, Duration.ofDays(1));
+        String targetUrl = getTargetUrl(accessToken);
+    }
+
+    private String getTargetUrl(String token) {
+        return UriComponentsBuilder.fromUriString("/api/articles")
+                .queryParam("token", token)
+                .build()
+                .toUriString();
     }
 }
