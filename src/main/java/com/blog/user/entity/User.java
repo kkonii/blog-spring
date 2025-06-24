@@ -27,15 +27,25 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    private String nickname;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     private String password;
 
     @Builder
-    public User(String email, String password) {
+    public User(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
+        this.nickname = nickname;
+    }
+
+    public User update(String nickname) {
+        this.nickname = nickname;
+
+        return this;
     }
 
     //권한 반환
