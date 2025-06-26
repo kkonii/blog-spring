@@ -5,6 +5,7 @@ import com.blog.article.controller.dto.request.UpdateArticleRequest;
 import com.blog.article.controller.dto.response.ArticleResponse;
 import com.blog.article.entity.Article;
 import com.blog.article.service.BlogService;
+import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class BlogApiController {
     private final BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest articleRequest) {
-        Article article = blogService.save(articleRequest);
+    public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest articleRequest, Principal principal) {
+        Article article = blogService.save(articleRequest, principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(article);
